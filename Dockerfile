@@ -11,6 +11,7 @@ RUN pip3 install torch --extra-index-url https://download.pytorch.org/whl/cpu
 RUN pip3 install transformers tokenizers
 
 ENV MODEL_NAME NbAiLab/nb-gpt-j-6B
+ENV DEVICE cpu
 ENV HF_AUTH_TOKEN ""
 
 RUN git config --global credential.helper store
@@ -22,4 +23,4 @@ COPY --chown=streamlitapp app.py /home/streamlitapp/app.py
 
 # RUN pip3 install -r /home/streamlitapp/requirements.txt
 
-CMD ["streamlit", "run", "/home/streamlitapp/app.py"]
+CMD ["streamlit", "run", "/home/streamlitapp/app.py", "--server.baseUrlPath=/gpt-j-demo", "--server.enableCORS=false"]
