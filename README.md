@@ -11,7 +11,7 @@ docker build  . --tag nb-gpt-j
 Run:
 
 ```bash
-docker run --rm -it -p 8080:8080 -e MODEL_NAME=NbAiLab/nb-gpt-j-6b -e HF_TOKEN=<api_token> -v $(pwd)/streamlitcache:/home/streamlitapp/.cache/huggingface nb-gpt-j
+docker run --rm -it -p 8080:8080 -e MODEL_NAME=NbAiLab/nb-gpt-j-6b -e HF_AUTH_TOKEN=<api_token> -v $(pwd)/streamlitcache:/home/streamlitapp/.cache/huggingface nb-gpt-j
 ```
 
 Register:
