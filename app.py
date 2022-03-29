@@ -7,7 +7,7 @@ from transformers import pipeline, set_seed
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
 
-TOKEN = os.environ.get("HF_TOKEN", None)
+HF_AUTH_TOKEN = os.environ.get("HF_AUTH_TOKEN", None)
 DEVICE = os.environ.get("DEVICE", "cpu")  # cuda:0
 DTYPE = torch.float32 if DEVICE == "cpu" else torch.float16
 MODEL_NAME = os.environ.get("MODEL_NAME", "NbAiLab/nb-gpt-j-6B")
@@ -82,10 +82,10 @@ class TextGeneration:
 
     def load(self):
         self.tokenizer = AutoTokenizer.from_pretrained(
-            self.model_name_or_path, use_auth_token=TOKEN if TOKEN else None,
+            self.model_name_or_path, use_auth_token=HF_AUTH_TOKEN if HF_AUTH_TOKEN else None,
         )
         self.model = AutoModelForCausalLM.from_pretrained(
-            self.model_name_or_path, use_auth_token=TOKEN if TOKEN else None,
+            self.model_name_or_path, use_auth_token=HF_AUTH_TOKEN if HF_AUTH_TOKEN else None,
             pad_token_id=self.tokenizer.eos_token_id, eos_token_id=self.tokenizer.eos_token_id,
             torch_dtype=DTYPE, low_cpu_mem_usage=False if DEVICE == "cpu" else True
         ).to(device=DEVICE, non_blocking=True)
