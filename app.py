@@ -120,12 +120,13 @@ def load_text_generator():
 def main():
     st.set_page_config(
         page_title="NB-GPT-J-6B",
-        page_icon="🏡",
+        page_icon="🇳🇴",
         layout="wide",
         initial_sidebar_state="expanded"
     )
     style()
-    generator = load_text_generator()
+    with st.spinner('Loading the model. Please, wait...'):
+        generator = load_text_generator()
 
     st.sidebar.markdown(SIDEBAR_INFO)
 
@@ -178,6 +179,7 @@ def main():
         "top_p": top_p,
         "temperature": temperature,
         "do_sample": do_sample,
+        "do_clean": do_clean,
     }
     st.markdown(HEADER_INFO)
     prompts = EXAMPLES + ["Custom"]
@@ -186,7 +188,7 @@ def main():
     if prompt == "Custom":
         prompt_box = PROMPT_BOX
     else:
-        prompt_box = random.choice(EXAMPLES)
+        prompt_box = prompt
 
     text = st.text_area("Enter text", prompt_box)
     generation_kwargs_ph = st.empty()

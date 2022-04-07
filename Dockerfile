@@ -23,4 +23,4 @@ COPY --chown=streamlitapp app.py /home/streamlitapp/app.py
 
 # RUN pip3 install -r /home/streamlitapp/requirements.txt
 
-CMD ["streamlit", "run", "/home/streamlitapp/app.py", "--server.baseUrlPath=/gpt-j-demo", "--server.enableCORS=false"]
+CMD ["streamlit", "run", "/home/streamlitapp/app.py", "--server.baseUrlPath=/demo/nb-gpt-j-6B", "--server.enableCORS=false", "--server.enableXsrfProtection=false"]
