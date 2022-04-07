@@ -90,7 +90,8 @@ class TextGeneration:
             torch_dtype=DTYPE, low_cpu_mem_usage=False if DEVICE == "cpu" else True
         ).to(device=DEVICE, non_blocking=True)
         _ = self.model.eval()
-        self.generator = pipeline(self.task, model=self.model, tokenizer=self.tokenizer)
+        device_number = -1 if DEVICE == "cpu" else int(DEVICE.split(":")[-1])
+        self.generator = pipeline(self.task, model=self.model, tokenizer=self.tokenizer, device=device_number)
         # with torch.no_grad():
         # tokens = tokenizer.encode(prompt, return_tensors='pt').to(device=device, non_blocking=True)
         # gen_tokens = self.model.generate(tokens, do_sample=True, temperature=0.8, max_length=128)
@@ -101,7 +102,7 @@ class TextGeneration:
 
     def generate(self, prompt, generation_kwargs):
         max_length = len(self.tokenizer(prompt)["input_ids"]) + generation_kwargs["max_length"]
-        generation_kwargs["max_length"] = max_length
+        generation_kwargs["max_length"] = min(max_length, self.model.config.n_positions)
         # generation_kwargs["num_return_sequences"] = 1
         # generation_kwargs["return_full_text"] = False
         return self.generator(
@@ -134,7 +135,7 @@ def main():
         label='Max Length',
         help="The maximum length of the sequence to be generated.",
         min_value=1,
-        max_value=256,
+        max_value=int(os.environ.get(MAX_LENGTH, 256)),
         value=50,
         step=1
     )
