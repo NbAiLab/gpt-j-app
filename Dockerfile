@@ -13,6 +13,7 @@ RUN pip3 install transformers tokenizers
 ENV MODEL_NAME NbAiLab/nb-gpt-j-6B
 ENV DEVICE cpu
 ENV HF_AUTH_TOKEN ""
+ENV MAX_LENGTH 256
 
 RUN git config --global credential.helper store
 RUN mkdir /home/streamlitapp/.huggingface

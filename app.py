@@ -11,6 +11,7 @@ HF_AUTH_TOKEN = os.environ.get("HF_AUTH_TOKEN", None)
 DEVICE = os.environ.get("DEVICE", "cpu")  # cuda:0
 DTYPE = torch.float32 if DEVICE == "cpu" else torch.float16
 MODEL_NAME = os.environ.get("MODEL_NAME", "NbAiLab/nb-gpt-j-6B")
+MAX_LENGTH = int(os.environ.get("MAX_LENGTH", 256))
 HEADER_INFO = """
 # NB-GPT-J-6B
 Norwegian GPT-J-6B Model.
@@ -135,7 +136,7 @@ def main():
         label='Max Length',
         help="The maximum length of the sequence to be generated.",
         min_value=1,
-        max_value=int(os.environ.get(MAX_LENGTH, 256)),
+        max_value=MAX_LENGTH,
         value=50,
         step=1
     )
