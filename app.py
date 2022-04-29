@@ -145,13 +145,14 @@ def main():
         generator = load_text_generator()
 
     st.sidebar.markdown(SIDEBAR_INFO, unsafe_allow_html=True)
+    query_params = st.experimental_get_query_params()
 
     max_length = st.sidebar.slider(
         label='Max words to generate',
         help="The maximum length of the sequence to be generated.",
         min_value=1,
         max_value=MAX_LENGTH,
-        value=50,
+        value=int(query_params.get("max_length", 50)),
         step=1
     )
     top_k = st.sidebar.slider(
@@ -159,7 +160,7 @@ def main():
         help="The number of highest probability vocabulary tokens to keep for top-k-filtering",
         min_value=40,
         max_value=80,
-        value=50,
+        value=int(query_params.get("top_k", 50)),
         step=1
     )
     top_p = st.sidebar.slider(
@@ -168,7 +169,7 @@ def main():
              "generation.",
         min_value=0.0,
         max_value=1.0,
-        value=0.95,
+        value=float(query_params.get("top_p", 0.95)),
         step=0.01
     )
     temperature = st.sidebar.slider(
@@ -176,18 +177,20 @@ def main():
         help="The value used to module the next token probabilities",
         min_value=0.1,
         max_value=10.0,
-        value=0.8,
+        value=float(query_params.get("temperature", 0.8)),
         step=0.05
     )
     do_sample = st.sidebar.selectbox(
         label='Sampling?',
         options=(True, False),
         help="Whether or not to use sampling; use greedy decoding otherwise.",
+        value=query_params.get("do_sample", "true").lower()[0] in ("t", "y", "1"),
     )
     do_clean = st.sidebar.selectbox(
         label='Clean text?',
         options=(True, False),
         help="Whether or not to remove repeated words and trim unfinished last sentences.",
+        value=query_params.get("do_clean", "true").lower()[0] in ("t", "y", "1"),
     )
     generation_kwargs = {
         "max_length": max_length,
