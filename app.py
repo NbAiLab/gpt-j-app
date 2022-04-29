@@ -98,6 +98,7 @@ class TextGeneration:
         set_seed(42)
 
     def load(self):
+        print("Loading model... ", end="")
         self.tokenizer = AutoTokenizer.from_pretrained(
             self.model_name_or_path, use_auth_token=HF_AUTH_TOKEN if HF_AUTH_TOKEN else None,
         )
@@ -109,6 +110,7 @@ class TextGeneration:
         _ = self.model.eval()
         device_number = -1 if DEVICE == "cpu" else int(DEVICE.split(":")[-1])
         self.generator = pipeline(self.task, model=self.model, tokenizer=self.tokenizer, device=device_number)
+        print("Done")
         # with torch.no_grad():
         # tokens = tokenizer.encode(prompt, return_tensors='pt').to(device=device, non_blocking=True)
         # gen_tokens = self.model.generate(tokens, do_sample=True, temperature=0.8, max_length=128)
