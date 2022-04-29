@@ -1,7 +1,9 @@
 import random
 import os
+from urllib.parse import urlencode
 
 import streamlit as st
+import streamlit.components.v1 as components
 import torch
 from transformers import pipeline, set_seed
 from transformers import AutoTokenizer, AutoModelForCausalLM
@@ -209,10 +211,14 @@ def main():
     else:
         prompt_box = prompt
 
-    text = st.text_area("Enter text", prompt_box)
+    query_text = query_params.get("text", [""])[0].strip()
+    if query_text:
+        text = query_text
+    else:
+        text = st.text_area("Enter text", prompt_box)
     generation_kwargs_ph = st.empty()
     cleaner = Normalizer()
-    if st.button("Generate!"):
+    if st.button("Generate!") or query_text:
         with st.spinner(text="Generating..."):
             generation_kwargs_ph.markdown(", ".join([f"`{k}`: {v}" for k, v in generation_kwargs.items()]))
             if text:
@@ -227,6 +233,19 @@ def main():
                     f'<span class="result-text generated-text">{generated_text}</span>'
                     f'</p>',
                     unsafe_allow_html=True
+                )
+                share_args = {"text": text, **generation_kwargs}
+                components.html(
+                    f"""
+                        <a href="http://ficino:8501/?{urlencode(share_args)}" class="twitter-share-button"
+                        data-text="Check my prompt using NB-GPT-J-6B!🇳🇴"
+                        data-show-count="false">
+                        data-size="Small"
+                        data-hashtags="nb,gpt-j"
+                        Tweet
+                        </a>
+                        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                    """
                 )
 
 if __name__ == '__main__':
