@@ -152,7 +152,7 @@ def main():
         help="The maximum length of the sequence to be generated.",
         min_value=1,
         max_value=MAX_LENGTH,
-        value=int(query_params.get("max_length", 50)),
+        value=int(query_params.get("max_length", [50])[0]),
         step=1
     )
     top_k = st.sidebar.slider(
@@ -160,7 +160,7 @@ def main():
         help="The number of highest probability vocabulary tokens to keep for top-k-filtering",
         min_value=40,
         max_value=80,
-        value=int(query_params.get("top_k", 50)),
+        value=int(query_params.get("top_k", [50])[0]),
         step=1
     )
     top_p = st.sidebar.slider(
@@ -169,7 +169,7 @@ def main():
              "generation.",
         min_value=0.0,
         max_value=1.0,
-        value=float(query_params.get("top_p", 0.95)),
+        value=float(query_params.get("top_p", [0.95])[0]),
         step=0.01
     )
     temperature = st.sidebar.slider(
@@ -177,20 +177,20 @@ def main():
         help="The value used to module the next token probabilities",
         min_value=0.1,
         max_value=10.0,
-        value=float(query_params.get("temperature", 0.8)),
+        value=float(query_params.get("temperature", [0.8])[0]),
         step=0.05
     )
     do_sample = st.sidebar.selectbox(
         label='Sampling?',
         options=(False, True),
         help="Whether or not to use sampling; use greedy decoding otherwise.",
-        index=int(query_params.get("do_sample", "true").lower()[0] in ("t", "y", "1")),
+        index=int(query_params.get("do_sample", ["true"])[0].lower()[0] in ("t", "y", "1")),
     )
     do_clean = st.sidebar.selectbox(
         label='Clean text?',
         options=(False, True),
         help="Whether or not to remove repeated words and trim unfinished last sentences.",
-        index=int(query_params.get("do_clean", "true").lower()[0] in ("t", "y", "1")),
+        index=int(query_params.get("do_clean", ["true"])[0].lower()[0] in ("t", "y", "1")),
     )
     generation_kwargs = {
         "max_length": max_length,
