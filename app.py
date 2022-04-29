@@ -217,6 +217,7 @@ def main():
     generation_kwargs_ph = st.empty()
     cleaner = Normalizer()
     if st.button("Generate!") or text != PROMPT_BOX:
+        output = st.empty()
         with st.spinner(text="Generating..."):
             generation_kwargs_ph.markdown(", ".join([f"`{k}`: {v}" for k, v in generation_kwargs.items()]))
             if text:
@@ -228,7 +229,7 @@ def main():
                         generated_text = cleaner.clean_txt(generated_text)
                     if generated_text.strip().startswith(text):
                         generated_text = generated_text.replace(text, "", 1).strip()
-                    st.markdown(
+                    output.markdown(
                         f'<p class="ltr ltr-box">'
                         f'<span class="result-text">{text} <span>'
                         f'<span class="result-text generated-text">{generated_text}</span>'
