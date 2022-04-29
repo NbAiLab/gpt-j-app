@@ -207,18 +207,14 @@ def main():
     prompt = st.selectbox('Examples', prompts, index=len(prompts) - 1)
 
     if prompt == "Custom":
-        prompt_box = PROMPT_BOX
+        prompt_box = query_params.get("text", [PROMPT_BOX])[0].strip()
     else:
         prompt_box = prompt
 
-    query_text = query_params.get("text", [""])[0].strip()
-    if query_text:
-        text = st.text_area("Enter text", query_text)
-    else:
-        text = st.text_area("Enter text", prompt_box)
+    text = st.text_area("Enter text", prompt_box)
     generation_kwargs_ph = st.empty()
     cleaner = Normalizer()
-    if st.button("Generate!") or query_text:
+    if st.button("Generate!") or text != PROMPT_BOX:
         with st.spinner(text="Generating..."):
             generation_kwargs_ph.markdown(", ".join([f"`{k}`: {v}" for k, v in generation_kwargs.items()]))
             if text:
