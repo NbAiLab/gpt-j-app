@@ -182,15 +182,15 @@ def main():
     )
     do_sample = st.sidebar.selectbox(
         label='Sampling?',
-        options=(True, False),
+        options=(False, True),
         help="Whether or not to use sampling; use greedy decoding otherwise.",
-        value=query_params.get("do_sample", "true").lower()[0] in ("t", "y", "1"),
+        index=int(query_params.get("do_sample", "true").lower()[0] in ("t", "y", "1")),
     )
     do_clean = st.sidebar.selectbox(
         label='Clean text?',
-        options=(True, False),
+        options=(False, True),
         help="Whether or not to remove repeated words and trim unfinished last sentences.",
-        value=query_params.get("do_clean", "true").lower()[0] in ("t", "y", "1"),
+        index=int(query_params.get("do_clean", "true").lower()[0] in ("t", "y", "1")),
     )
     generation_kwargs = {
         "max_length": max_length,
