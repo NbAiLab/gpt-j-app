@@ -213,7 +213,7 @@ def main():
 
     query_text = query_params.get("text", [""])[0].strip()
     if query_text:
-        text = query_text
+        text = st.text_area("Enter text", query_text)
     else:
         text = st.text_area("Enter text", prompt_box)
     generation_kwargs_ph = st.empty()
@@ -235,10 +235,11 @@ def main():
                     unsafe_allow_html=True
                 )
                 share_args = {"text": text, **generation_kwargs}
+                st.experimental_set_query_params(**share_args)
                 components.html(
                     f"""
-                        <a href="http://ficino:8501/?{urlencode(share_args)}" class="twitter-share-button"
-                        data-text="Check my prompt using NB-GPT-J-6B!🇳🇴"
+                        <a class="twitter-share-button"
+                        data-text="Check my prompt using NB-GPT-J-6B!🇳🇴  https://ai.nb.no/demo/nb-gpt-j-6B/?{urlencode(share_args)}"
                         data-show-count="false">
                         data-size="Small"
                         data-hashtags="nb,gpt-j"
