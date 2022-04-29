@@ -148,6 +148,8 @@ def main():
 
     st.sidebar.markdown(SIDEBAR_INFO, unsafe_allow_html=True)
     query_params = st.experimental_get_query_params()
+    if query_params:
+        st.experimental_set_query_params(**dict())
 
     max_length = st.sidebar.slider(
         label='Max words to generate',
@@ -218,32 +220,37 @@ def main():
         with st.spinner(text="Generating..."):
             generation_kwargs_ph.markdown(", ".join([f"`{k}`: {v}" for k, v in generation_kwargs.items()]))
             if text:
-                generated_text = generator.generate(text, generation_kwargs)
-                if do_clean:
-                    generated_text = cleaner.clean_txt(generated_text)
-                if generated_text.strip().startswith(text):
-                    generated_text = generated_text.replace(text, "", 1).strip()
-                st.markdown(
-                    f'<p class="ltr ltr-box">'
-                    f'<span class="result-text">{text} <span>'
-                    f'<span class="result-text generated-text">{generated_text}</span>'
-                    f'</p>',
-                    unsafe_allow_html=True
-                )
                 share_args = {"text": text, **generation_kwargs}
                 st.experimental_set_query_params(**share_args)
-                components.html(
-                    f"""
-                        <a class="twitter-share-button"
-                        data-text="Check my prompt using NB-GPT-J-6B!🇳🇴  https://ai.nb.no/demo/nb-gpt-j-6B/?{urlencode(share_args)}"
-                        data-show-count="false">
-                        data-size="Small"
-                        data-hashtags="nb,gpt-j"
-                        Tweet
-                        </a>
-                        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-                    """
-                )
+                for _ in range(5):
+                    generated_text = generator.generate(text, generation_kwargs)
+                    if do_clean:
+                        generated_text = cleaner.clean_txt(generated_text)
+                    if generated_text.strip().startswith(text):
+                        generated_text = generated_text.replace(text, "", 1).strip()
+                    st.markdown(
+                        f'<p class="ltr ltr-box">'
+                        f'<span class="result-text">{text} <span>'
+                        f'<span class="result-text generated-text">{generated_text}</span>'
+                        f'</p>',
+                        unsafe_allow_html=True
+                    )
+                    if generated_text.strip():
+                        components.html(
+                            f"""
+                                <a class="twitter-share-button"
+                                data-text="Check my prompt using NB-GPT-J-6B!🇳🇴 https://ai.nb.no/demo/nb-gpt-j-6B/?{urlencode(share_args)}"
+                                data-show-count="false">
+                                data-size="Small"
+                                data-hashtags="nb,gpt-j"
+                                Tweet
+                                </a>
+                                <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                            """
+                        )
+                        break
+                if not generated_text.strip():
+                    st.markdown("*Tried 5 times but did not produce any result. Try again!*")
 
 if __name__ == '__main__':
     main()
