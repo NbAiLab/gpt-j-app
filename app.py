@@ -19,11 +19,16 @@ Norwegian GPT-J-6B Model.
 LOGO = "https://s3.amazonaws.com/moonup/production/uploads/1644417861130-5ef3829e518622264685b0cd.webp"
 SIDEBAR_INFO = f"""
 <div align=center>
-<img src="{LOGO}" width=200/>
+<img src="{LOGO}" width=100/>
+
 # NB-GPT-J-6B
+
 </div>
-NB-GPT-J-6B is a 6 billion parameters decoder-only auto-regressive model for Norwegian by the [National Library of Norway AI-Lab](https://ai.nb.no).
-This model has been trained with [Mesh Transformer JAX](https://github.com/kingoflolz/mesh-transformer-jax) on TPUs provided by Google through the Tensor Research Cloud program, starting with the [GPT-J model weigths from EleutherAI](https://huggingface.co/EleutherAI/gpt-j-6B) with the [Norwegian Colossal Corpus](https://huggingface.co/datasets/NbAiLab/NCC) and other Internet sources. This demo runs on a {DEVICE.split(':')[0].upper()}.
+
+NB-GPT-J-6B is a GTP-3-like model Norwegian by the [National Library of Norway AI-Lab](https://ai.nb.no).
+
+This model has been trained with [Mesh Transformer JAX](https://github.com/kingoflolz/mesh-transformer-jax) using TPUs provided by Google through the Tensor Research Cloud program, starting off the [GPT-J-6B model weigths from EleutherAI](https://huggingface.co/EleutherAI/gpt-j-6B), and trained on the [Norwegian Colossal Corpus](https://huggingface.co/datasets/NbAiLab/NCC) and other Internet sources. *This demo runs on {DEVICE.split(':')[0].upper()}*.
+
 For more information, visit the [model repository](https://huggingface.co/NbAiLab/nb-gpt-j-6B).
 
 ## Configuration
@@ -139,10 +144,10 @@ def main():
     with st.spinner('Loading the model. Please, wait...'):
         generator = load_text_generator()
 
-    st.sidebar.markdown(SIDEBAR_INFO)
+    st.sidebar.markdown(SIDEBAR_INFO, unsafe_allow_html=True)
 
     max_length = st.sidebar.slider(
-        label='Max Length',
+        label='Max words to generate',
         help="The maximum length of the sequence to be generated.",
         min_value=1,
         max_value=MAX_LENGTH,
