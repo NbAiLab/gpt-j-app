@@ -16,8 +16,17 @@ HEADER_INFO = """
 # NB-GPT-J-6B
 Norwegian GPT-J-6B Model.
 """.strip()
-SIDEBAR_INFO = """
-# Configuration
+LOGO = "https://s3.amazonaws.com/moonup/production/uploads/1644417861130-5ef3829e518622264685b0cd.webp"
+SIDEBAR_INFO = f"""
+<div align=center>
+<img src="{LOGO}" width=200/>
+# NB-GPT-J-6B
+</div>
+NB-GPT-J-6B is a 6 billion parameters decoder-only auto-regressive model for Norwegian by the [National Library of Norway AI-Lab](https://ai.nb.no).
+This model has been trained with [Mesh Transformer JAX](https://github.com/kingoflolz/mesh-transformer-jax) on TPUs provided by Google through the Tensor Research Cloud program, starting with the [GPT-J model weigths from EleutherAI](https://huggingface.co/EleutherAI/gpt-j-6B) with the [Norwegian Colossal Corpus](https://huggingface.co/datasets/NbAiLab/NCC) and other Internet sources. This demo runs on a {DEVICE.split(':')[0].upper()}.
+For more information, visit the [model repository](https://huggingface.co/NbAiLab/nb-gpt-j-6B).
+
+## Configuration
 """.strip()
 PROMPT_BOX = "Enter your text..."
 EXAMPLES = [
