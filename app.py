@@ -130,7 +130,8 @@ class TextGeneration:
         )[0]["generated_text"]
 
 
-@st.cache(allow_output_mutation=True)
+#@st.cache(allow_output_mutation=True, hash_funcs={AutoModelForCausalLM: lambda _: None})
+@st.cache(allow_output_mutation=True, hash_funcs={TextGeneration: lambda _: None})
 def load_text_generator():
     generator = TextGeneration()
     generator.load()
