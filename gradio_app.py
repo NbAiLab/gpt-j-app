@@ -319,7 +319,7 @@ with gr.Blocks() as demo:
                     with gr.Row():
                         generate_btn = gr.Button("Generer")
                         generate_btn.click(complete_with_gpt, inputs=[textbox, max_length, top_k, top_p, temperature, do_sample, do_clean], outputs=[textbox, hidden, output])
-                        expand_btn = gr.Button("Añadir")
+                        expand_btn = gr.Button("Legg til")
                         expand_btn.click(expand_with_gpt, inputs=[hidden, textbox, max_length, top_k, top_p, temperature, do_sample, do_clean], outputs=[textbox, hidden, output])
 
                         edit_btn = gr.Button("Redigere", variant="secondary")
