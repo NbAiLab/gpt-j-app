@@ -142,10 +142,10 @@ class TextGeneration:
                     text,
                     **generation_kwargs,
                 )[0]["generated_text"]
-                if generation_kwargs["do_clean"]:
-                    generated_text = cleaner.clean_txt(generated_text)
                 if generated_text.strip().startswith(text):
                     generated_text = generated_text.replace(text, "", 1).strip()
+                if generation_kwargs["do_clean"]:
+                    generated_text = cleaner.clean_txt(generated_text)
                 if generated_text:
                     return (
                         text,
@@ -233,16 +233,17 @@ def chat_with_gpt(user, agent, context, user_message, history, max_length, top_k
             break
     context += history_context
     for _ in range(5):
-        response = generator.generate(f"{context}\n\n{user}: {message}.\n", generation_kwargs)[1]
+        prompt = f"{context}\n\n{user}: {message}.\n"
+        response = generator.generate(prompt, generation_kwargs)[1]
         if DEBUG:
-            print("\n-----" + response + "-----\n")
+            print("\n-----\n" + response + "\n-----\n")
         # response = response.split("\n")[-1]
         # if agent in response and response.split(agent)[-1]:
         #     response = response.split(agent)[-1]
         # if user in response and response.split(user)[-1]:
         #     response = response.split(user)[-1]
         response = [
-            r for r in response.split(f"{AGENT}:") if r.strip()
+            r for r in response.replace(prompt, "").split(f"{AGENT}:") if r.strip()
         ][0].split(USER)[0].replace(f"{AGENT}:", "\n").strip()
         if response[0] in string.punctuation:
             response = response[1:].strip()
