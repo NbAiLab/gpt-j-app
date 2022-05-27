@@ -236,11 +236,14 @@ def chat_with_gpt(user, agent, context, user_message, history, max_length, top_k
         response = generator.generate(f"{context}\n\n{user}: {message}.\n", generation_kwargs)[1]
         if DEBUG:
             print("\n-----" + response + "-----\n")
-        response = response.split("\n")[-1]
-        if agent in response and response.split(agent)[-1]:
-            response = response.split(agent)[-1]
-        if user in response and response.split(user)[-1]:
-            response = response.split(user)[-1]
+        # response = response.split("\n")[-1]
+        # if agent in response and response.split(agent)[-1]:
+        #     response = response.split(agent)[-1]
+        # if user in response and response.split(user)[-1]:
+        #     response = response.split(user)[-1]
+        response = [
+            r for r in response.split(f"{AGENT}:") if r.strip()
+        ][0].split(USER)[0].replace(f"{AGENT}:", "\n").strip()
         if response[0] in string.punctuation:
             response = response[1:].strip()
         if response.strip().startswith(f"{user}: {message}"):
@@ -339,7 +342,7 @@ with gr.Blocks() as demo:
                     with gr.Row():
                         message = gr.Textbox(placeholder="Skriv meldingen din her og trykk 'Send'", show_label=False)
                         chat_btn = gr.Button("Send")
-                    chat_btn.click(chat_with_gpt, inputs=[agent, user, context, message, history, max_length, top_k, top_p, temperature, do_sample, do_clean], outputs=[chatbot, history, message])
+                    chat_btn.click(chat_with_gpt, inputs=[user, agent, context, message, history, max_length, top_k, top_p, temperature, do_sample, do_clean], outputs=[chatbot, history, message])
     gr.Markdown(FOOTER)
 
 
